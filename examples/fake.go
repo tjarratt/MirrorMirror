@@ -8,6 +8,7 @@ type CoolThingToTest interface {
 	AndThisIsSomethingAsWell() (returningValue bool)
 	EdgeCasesYay(string) (bool)
 	AndMoreEdgeCasesAreFunToo()
+	butMaybeNotThisPrivateThing()
 }
 
 type CoolThing struct {
