@@ -73,29 +73,8 @@ func sprinkleSugarOn(pathToFile, interfaceToMock string) {
 
 	fmt.Printf("Writing a mock interface to %s\n\n", outputFilePath)
 
-	fakeMock := DeclareFakeImplementingInterface(interfaceToMock, interfaceNode)
-	fmt.Printf("fake implementation looks like:\n**********\n%s\n**********\n", fakeMock)
-}
+	i := createInterfaceFromNameAndNode(interfaceToMock, interfaceNode)
 
-func DeclareFakeImplementingInterface(name string, anInterface *ast.InterfaceType) string {
-	methods := []Method{}
-	var fakeStructDeclaration string
-
-	for _, m := range anInterface.Methods.List {
-		method := newMethod(m)
-		methods = append(methods, method)
-
-		params := method.ParamSlice.String()
-		returns := method.ReturnSlice.String()
-		fakeStructDeclaration = fmt.Sprintf("%s\t%s (%s) (%s)\n", fakeStructDeclaration, method.Name, params, returns)
-	}
-
-
-	return fmt.Sprintf("type Fake%s struct {\n%s}", name, fakeStructDeclaration)
-}
-
-func StubbedMethodsForInterface(anInterface *ast.InterfaceType) string {
-  formatString := "func (fake %s) %s (%s) (%s) {\n%s\n}"
-	args := []interface{}{}
-	return fmt.Sprintf(formatString, args...)
+	fakeStruct := i.fakeStructDeclaration()
+	fmt.Printf("fake implementation:\n**********\n%s\n**********\n", fakeStruct)
 }
