@@ -65,6 +65,11 @@ func sprinkleSugarOn(pathToFile, interfaceToMock string) {
 		return true
 	})
 
+	if interfaceNode == nil || packageName == "" {
+		println("Could not find interface:", interfaceToMock)
+		os.Exit(1)
+	}
+
 	fmt.Printf("\nmocking out %s.%s Interface\n", packageName, interfaceToMock)
 
 	outputFileName := filepath.Base(pathToFile)
