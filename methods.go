@@ -12,6 +12,10 @@ type Return struct {
 	returnType string
 }
 
+func (r Return) UpperName() string {
+	return strings.ToUpper(string(r.name[0])) + r.name[1 : len(r.name)]
+}
+
 func (rs Returns) String() string {
 	pairs := []string{}
 	for _, r := range rs {
@@ -30,6 +34,10 @@ type Params []Param
 type Param struct {
 	name string
 	paramType string
+}
+
+func (p Param) UpperName() string {
+	return strings.ToUpper(string(p.name[0])) + p.name[1 : len(p.name)]
 }
 
 func (ps Params) String() string {

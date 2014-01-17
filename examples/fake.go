@@ -3,7 +3,7 @@ package fakery
 type Foobar struct {}
 
 type CoolThingToTest interface {
-  MethodToTest(param string, param2 int32) (result bool, result2 string)
+  MethodToTest(paramOne string, paramTwo int32) (result bool, result2 string)
 	IGuessThisIsOkayToo(takesAParam string)
 	AndThisIsSomethingAsWell() (returningValue bool)
 	EdgeCasesYay(string) (bool)
@@ -23,3 +23,18 @@ func (thing CoolThing) MethodToTest(param string, param2 int32) (result bool, re
   }
   return
 }
+
+
+/* fakery ahead
+type FakeCoolThingToTest struct {
+	Returns struct {
+		MethodToTestResult bool
+		MethodToTestResult2 string
+	}
+
+	Received struct {
+		MethodToTestParam string
+		MethodToTestParam2 int32
+	}
+}
+*/

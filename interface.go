@@ -23,26 +23,49 @@ func createInterfaceFromNameAndNode(name string, anInterface *ast.InterfaceType)
 }
 
 func (i Interface) fakeStructDeclaration() string {
-	var fakeStructDeclaration string
+	returnsSlice := []string{}
+	receivedSlice := []string{}
 
 	for _, method := range i.methods {
-		params := method.ParamSlice.String()
-		returns := method.ReturnSlice.String()
-		fakeStructDeclaration = fmt.Sprintf("%s\t%s (%s) (%s)\n", fakeStructDeclaration, method.Name, params, returns)
+		for index, p := range method.ParamSlice {
+			var concatName string
+			if p.name == "" {
+				concatName = method.Name + "Param" + fmt.Sprintf("%d", index)
+			} else {
+				concatName = method.Name + p.UpperName()
+			}
+
+			receivedSlice = append(receivedSlice, concatName + " " + p.paramType)
+		}
+
+		for index, r := range method.ReturnSlice {
+			var concatName string
+			if r.name == "" {
+				concatName = method.Name + "Return" + fmt.Sprintf("%d", index)
+			} else {
+				concatName = method.Name + r.UpperName()
+			}
+
+			returnsSlice = append(returnsSlice, concatName + " " + r.returnType)
+		}
 	}
 
-	return fmt.Sprintf("type Fake%s struct {\n%s}", i.name, fakeStructDeclaration)
+	return fmt.Sprintf("type Fake%s struct {\n\t%s\n\t%s\n}\n",
+		i.name,
+		fmt.Sprintf("Returns struct {\n\t\t%s\n\t}\n", strings.Join(returnsSlice, "\n\t\t")),
+		fmt.Sprintf("Received struct {\n\t\t%s\n\t}\n", strings.Join(receivedSlice, "\n\t\t")),
+	)
 }
 
 func (i Interface) StubbedMethods() string {
 	var results []string
-	formatString := "func %s (fake %s) (%s) (%s) {\n%s\n}"
+	formatString := "func (fake *%s) %s(%s) (%s) {\n%s\n}"
 
 	for _, m := range i.methods {
 		params := m.ParamSlice.String()
 		returns := m.ReturnSlice.String()
-		body := ""
-		results = append(results, fmt.Sprintf(formatString, m.Name, i.name, params, returns, body))
+		body := "\treturn"
+		results = append(results, fmt.Sprintf(formatString, i.name, m.Name, params, returns, body))
 	}
 
 	return strings.Join(results, "\n\n")
