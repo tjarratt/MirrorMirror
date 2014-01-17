@@ -81,5 +81,6 @@ func sprinkleSugarOn(pathToFile, interfaceToMock string) {
 	i := createInterfaceFromNameAndNode(interfaceToMock, interfaceNode)
 
 	fakeStruct := i.fakeStructDeclaration()
-	fmt.Printf("fake implementation:\n**********\n%s\n**********\n", fakeStruct)
+	fakeMethods := i.StubbedMethods()
+	fmt.Printf("fake implementation:\n******************************\n%s\n\n%s\n******************************\n", fakeStruct, fakeMethods)
 }

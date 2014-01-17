@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go/ast"
+	"strings"
 )
 
 type Interface struct {
@@ -34,7 +35,15 @@ func (i Interface) fakeStructDeclaration() string {
 }
 
 func (i Interface) StubbedMethods() string {
-	formatString := "func (fake %s) %s (%s) (%s) {\n%s\n}"
-	args := []interface{}{}
-	return fmt.Sprintf(formatString, args...)
+	var results []string
+	formatString := "func %s (fake %s) (%s) (%s) {\n%s\n}"
+
+	for _, m := range i.methods {
+		params := m.ParamSlice.String()
+		returns := m.ReturnSlice.String()
+		body := ""
+		results = append(results, fmt.Sprintf(formatString, m.Name, i.name, params, returns, body))
+	}
+
+	return strings.Join(results, "\n\n")
 }
