@@ -18,13 +18,12 @@ func (r Return) UpperName() string {
 
 func (rs Returns) String() string {
 	pairs := []string{}
-	for _, r := range rs {
-		rStr := r.returnType
+	for index, r := range rs {
 		if r.name != "" {
-			rStr = strings.Join([]string{r.name, r.returnType}, " ")
+			pairs = append(pairs, strings.Join([]string{r.name, r.returnType}, " "))
+		} else {
+			pairs = append(pairs, strings.Join([]string{"return" + fmt.Sprintf("%d", index + 1), r.returnType}, " "))
 		}
-
-		pairs = append(pairs, rStr)
 	}
 
 	return strings.Join(pairs, ", ")
@@ -42,13 +41,12 @@ func (p Param) UpperName() string {
 
 func (ps Params) String() string {
 	pairs := []string{}
-	for _, p := range ps {
-		pStr := p.paramType
+	for index, p := range ps {
 		if p.name != "" {
-			pStr = strings.Join([]string{p.name, p.paramType}, " ")
+			pairs = append(pairs, strings.Join([]string{p.name, p.paramType}, " "))
+		} else {
+			pairs = append(pairs, strings.Join([]string{fmt.Sprintf("param%d", index + 1), p.paramType}, " "))
 		}
-
-		pairs = append(pairs, pStr)
 	}
 
 	return strings.Join(pairs, ", ")
