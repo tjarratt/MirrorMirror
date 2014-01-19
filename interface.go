@@ -30,7 +30,7 @@ func (i Interface) fakeStructDeclaration() string {
 		for index, p := range method.ParamSlice {
 			var concatName string
 			if p.name == "" {
-				concatName = method.Name + "Param" + fmt.Sprintf("%d", index)
+				concatName = method.Name + "Param" + fmt.Sprintf("%d", index + 1)
 			} else {
 				concatName = method.Name + p.UpperName()
 			}
@@ -41,7 +41,7 @@ func (i Interface) fakeStructDeclaration() string {
 		for index, r := range method.ReturnSlice {
 			var concatName string
 			if r.name == "" {
-				concatName = method.Name + "Return" + fmt.Sprintf("%d", index)
+				concatName = method.Name + "Return" + fmt.Sprintf("%d", index + 1)
 			} else {
 				concatName = method.Name + r.UpperName()
 			}
